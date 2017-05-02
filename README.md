@@ -1,3 +1,5 @@
+[demo效果展示](https://zhouxingzu.github.io/Validate/)
+
 ## 表单验证控件
 ### 默认校验规则
 序号 | 规则 | 描述
