@@ -1,4 +1,4 @@
-[demo效果展示](https://zhouxingzu.github.io/Validate/)
+Demo效果展示: [https://zhouxingzu.github.io/Validate/](https://zhouxingzu.github.io/Validate/)
 
 ## 表单验证控件
 ### 默认校验规则
