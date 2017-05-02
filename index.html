@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src='js/validate.js'></script>
+</head>
+<body>
+    <form action="" id="test-form">
+        <div class="content">
+            <label for="name">姓名(必填)</label>
+            <input type="text" name="name" id="name" validate="{minlength:2, required:true}">
+        </div>
+        <div class="content">
+            <label for="card">身份证(必填)</label>
+            <input type="text" name="card" id="card" validate="{vIdCard:true, required:true}">
+        </div>
+        <div class="content">
+            <label>性别</label>
+            <input type="radio" name="sex" value="male" checked>男
+            <input type="radio" name="sex" value="female">女
+        </div>
+        <div class="content">
+            <label for="email">email</label>
+            <input type="email" name="email" id="email" validate="{vEmail:true}">
+        </div>
+        <div class="content">
+            <label for="tel">手机</label>
+            <input type="tel" name="tel" id="tel" validate="{vTel:true}">
+        </div>
+        <div class="content">
+            <label for="date">出生日期(如:2016-10-11)</label>
+            <input type="text" name="date" id="date" validate="{vDate:true, diyFun:['date','choose_text','choose_message']}">
+        </div>
+        <div class="content">
+            <label for="number">4位以上数字</label>
+            <input type="text" name="number4" id="number4" validate="{vNumber:true, minlength:4}">
+        </div>
+        <div class="content">
+            <label for="password">输入密码</label>
+            <input type="password" name="password" id="password" validate="{vPassword:true}">
+        </div>
+        <div class="content">
+            <label for="confirm_password">确认密码</label>
+            <input type="password" name="confirm_password" id="confirm_password" validate="{equalTo:'password'}">
+        </div>
+        <div class="content">
+            <select id="choose_message">
+                <option value="">请选择</option>
+                <option value="0" name="vIdCard">身份证</option>
+                <option value="1" name="vEmail">邮箱</option>
+                <option value="2" name="vTel">电话</option>
+            </select>
+            <input type="text" name="text" value="" id="choose_text" validate="{select:'choose_message'}">
+        </div>
+        <br>
+        <input type="submit" value="提交" id="submit" />
+    </form>
+
+	<script>
+		/*** 验证规则填写如下(左边ID，右边相应规则) ***/
+		var test1Rules={
+	        name:{
+	            minlength:2,
+	            required:true
+	        },
+	        card:{
+	            vIdCard:true,
+	            required:true
+	        },
+	        email:{
+	        	vEmail:true
+	        },
+	        tel:{vTel:true},
+	        date:{
+                vDate:true,
+                diyFun:["date","choose_text","choose_message"]
+            },
+	        number4:{
+	            vNumber:true,
+	            minlength:4
+	        },
+	        password:{vPassword:true},
+	        confirm_password:{
+	            vPassword:true,
+	            equalTo:"password"
+	        },
+	        choose_text:{select:"choose_message"}
+		}
+		
+	    //可自定义提示信息(左边ID，右边相应提示信息)
+	    var test1Messages = {
+	        name: {
+	            minlength:"2个字符以上",
+	            required:"请填写姓名"
+	        },
+	        card: {
+	            idCard:"身份证格式不正确",
+	            required: "请填写身份证"
+	        }
+	    }
+        
+        //第一种引用方式
+		// var test1 = new Validate(test1Rules,test1Messages,diyRule);
+		// test1.submit = document.getElementById("submit");
+		// test1.submitFun(test1.submit);
+
+
+
+        //第二种引用方式
+		var form = document.getElementById("test-form");
+		var test2 = new Validate(form);
+        //自定义特殊验证方法
+        test2.diyFun = function(id,toId,choose){
+            var element = document.getElementById(id);
+            var toElement = document.getElementById(toId);
+            var choose = document.getElementById(choose);
+            var x = choose.selectedIndex;
+            var y = choose.options;
+            var z = y[x].getAttribute('name');
+            //判断身份证生日与出生日期填写一致
+            if(z=='vIdCard'){
+                var birthday = element.value.replace(/\-/g,"")
+                var idCardBirthday = toElement.value.substr(6,8);
+                if(birthday==idCardBirthday){
+                    istrue = true;
+                }
+                else{
+                    istrue = false;
+                }
+            }
+            else{
+                istrue = true;
+            }
+        }
+
+		//自定义图标
+		test2.imgUrl = 'error.png';
+        //自定义提示信息
+		test2.messages = {
+	        card: {
+	            idCard:"身份证格式不正确",
+	            required: "请填写身份证"
+	        },
+            date: {
+                diyFun:"与身份证的日期不一致"
+            } 
+	    }
+
+        test2.submit = document.getElementById("submit");
+        test2.submitFun(test2.submit);
+        
+	</script>
+</body>
+</html>
